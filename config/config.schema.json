@@ -1,0 +1,294 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Forex Trading Bot Configuration",
+  "type": "object",
+  "required": ["trading", "risk_management", "indicators", "symbols"],
+  "properties": {
+    "mode": {
+      "type": "string",
+      "enum": ["demo", "paper", "live"],
+      "default": "demo",
+      "description": "Trading mode: demo, paper, or live"
+    },
+    "trading": {
+      "type": "object",
+      "required": ["symbols"],
+      "properties": {
+        "symbols": {
+          "type": "array",
+          "items": {"type": "string"},
+          "minItems": 1,
+          "description": "Currency pairs to trade"
+        },
+        "timeframe_entry": {
+          "type": "string",
+          "default": "15m",
+          "enum": ["1m", "5m", "15m", "30m", "1h"],
+          "description": "Entry timeframe"
+        },
+        "timeframe_trend": {
+          "type": "string",
+          "default": "1h",
+          "enum": ["1h", "4h", "1d"],
+          "description": "Trend filter timeframe"
+        },
+        "max_positions": {
+          "type": "integer",
+          "default": 3,
+          "minimum": 1,
+          "description": "Maximum simultaneous positions"
+        },
+        "cooldown_minutes": {
+          "type": "integer",
+          "default": 60,
+          "minimum": 0,
+          "description": "Cooldown period after trade closure (minutes)"
+        }
+      }
+    },
+    "risk_management": {
+      "type": "object",
+      "properties": {
+        "risk_per_trade": {
+          "type": "number",
+          "default": 0.005,
+          "minimum": 0.0001,
+          "maximum": 0.10,
+          "description": "Risk per trade as fraction of equity (0.005 = 0.5%)"
+        },
+        "risk_reward_ratio": {
+          "type": "number",
+          "default": 2.0,
+          "minimum": 1.0,
+          "maximum": 10.0,
+          "description": "Target risk/reward ratio"
+        },
+        "max_daily_loss_pct": {
+          "type": "number",
+          "default": 0.02,
+          "minimum": 0.01,
+          "description": "Maximum daily loss as % of equity"
+        },
+        "max_weekly_loss_pct": {
+          "type": "number",
+          "default": 0.05,
+          "minimum": 0.01,
+          "description": "Maximum weekly loss as % of equity"
+        },
+        "max_drawdown_pct": {
+          "type": "number",
+          "default": 0.15,
+          "minimum": 0.05,
+          "description": "Maximum drawdown as % of equity"
+        },
+        "max_consecutive_losses": {
+          "type": "integer",
+          "default": 5,
+          "minimum": 2,
+          "description": "Maximum consecutive losses before stop"
+        },
+        "min_sl_pips": {
+          "type": "number",
+          "default": 5,
+          "minimum": 1,
+          "description": "Minimum stop loss distance in pips"
+        },
+        "max_sl_pips": {
+          "type": "number",
+          "default": 100,
+          "minimum": 10,
+          "description": "Maximum stop loss distance in pips"
+        }
+      }
+    },
+    "indicators": {
+      "type": "object",
+      "properties": {
+        "ema_trend": {
+          "type": "integer",
+          "default": 200,
+          "minimum": 50,
+          "description": "EMA period for trend filter"
+        },
+        "ema_fast": {
+          "type": "integer",
+          "default": 20,
+          "minimum": 5,
+          "description": "Fast EMA period for pullback detection"
+        },
+        "ema_slow": {
+          "type": "integer",
+          "default": 50,
+          "minimum": 10,
+          "description": "Slow EMA period for pullback detection"
+        },
+        "atr_period": {
+          "type": "integer",
+          "default": 14,
+          "minimum": 5,
+          "description": "ATR period for volatility measurement"
+        },
+        "atr_pullback_distance": {
+          "type": "number",
+          "default": 0.5,
+          "minimum": 0.1,
+          "description": "Pullback distance in ATR multiples"
+        },
+        "swing_lookback": {
+          "type": "integer",
+          "default": 5,
+          "minimum": 2,
+          "description": "Number of candles for swing detection"
+        },
+        "atr_sl_buffer": {
+          "type": "number",
+          "default": 0,
+          "minimum": 0,
+          "description": "ATR buffer for SL beyond swing (0 = disabled)"
+        },
+        "ema_trend_threshold_pips": {
+          "type": "number",
+          "default": 10,
+          "minimum": 0,
+          "description": "Minimum distance from 200 EMA to trade (pips)"
+        }
+      }
+    },
+    "entry_confirmation": {
+      "type": "object",
+      "properties": {
+        "enable_engulfing": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable engulfing candle confirmation"
+        },
+        "enable_rejection": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable rejection candle confirmation"
+        },
+        "rejection_wick_ratio": {
+          "type": "number",
+          "default": 1.5,
+          "minimum": 1.0,
+          "description": "Wick/body ratio for rejection candle"
+        }
+      }
+    },
+    "filters": {
+      "type": "object",
+      "properties": {
+        "max_spread_pips": {
+          "type": "number",
+          "default": 1.5,
+          "minimum": 0.1,
+          "description": "Maximum spread to trade (pips)"
+        },
+        "min_atr_pips": {
+          "type": "number",
+          "default": 0,
+          "minimum": 0,
+          "description": "Minimum ATR volatility to trade (pips, 0 = disabled)"
+        },
+        "max_atr_pips": {
+          "type": "number",
+          "default": 0,
+          "minimum": 0,
+          "description": "Maximum ATR volatility to trade (pips, 0 = disabled)"
+        },
+        "trading_sessions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["london", "newyork", "tokyo", "sydney", "all"]
+          },
+          "default": ["london", "newyork"],
+          "description": "Trading sessions to allow"
+        },
+        "trading_days": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["monday", "tuesday", "wednesday", "thursday", "friday"]
+          },
+          "default": ["monday", "tuesday", "wednesday", "thursday", "friday"],
+          "description": "Days of week to trade"
+        }
+      }
+    },
+    "trade_management": {
+      "type": "object",
+      "properties": {
+        "enable_breakeven": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable break-even after X R"
+        },
+        "breakeven_after_r": {
+          "type": "number",
+          "default": 1.0,
+          "minimum": 0.5,
+          "description": "Move to break-even after this many R profit"
+        },
+        "enable_partial_profit": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable partial profit taking"
+        },
+        "partial_profit_levels": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "r_level": {"type": "number"},
+              "quantity_pct": {"type": "number"}
+            }
+          },
+          "default": [],
+          "description": "Levels for partial profit taking"
+        },
+        "enable_trailing_stop": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable trailing stop"
+        },
+        "trailing_stop_pips": {
+          "type": "number",
+          "default": 0,
+          "description": "Trailing stop distance in pips"
+        },
+        "enable_atr_trailing_stop": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable ATR-based trailing stop"
+        },
+        "atr_trailing_multiplier": {
+          "type": "number",
+          "default": 1.0,
+          "description": "ATR multiplier for trailing stop"
+        }
+      }
+    },
+    "logging": {
+      "type": "object",
+      "properties": {
+        "log_level": {
+          "type": "string",
+          "enum": ["DEBUG", "INFO", "WARNING", "ERROR"],
+          "default": "INFO",
+          "description": "Logging level"
+        },
+        "log_to_file": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable file logging"
+        },
+        "log_to_console": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable console logging"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,77 @@
+# Aggressive Configuration - Higher Risk Tolerance
+# Use only after extensive out-of-sample validation.
+# WARNING: This will draw down faster during losing streaks.
+
+mode: paper  # Always start with paper
+
+trading:
+  symbols:
+    - EUR/USD
+    - GBP/USD
+    - USD/JPY
+  
+  timeframe_entry: 15m
+  timeframe_trend: 1h
+  
+  max_positions: 2              # Two positions open simultaneously
+  cooldown_minutes: 30          # Shorter cooldown
+
+risk_management:
+  risk_per_trade: 0.01          # 1% per trade
+  risk_reward_ratio: 1.5        # Can accept 1:1.5
+  
+  max_daily_loss_pct: 0.04      # 4% daily stop
+  max_weekly_loss_pct: 0.10     # 10% weekly stop
+  max_drawdown_pct: 0.25        # 25% max drawdown
+  
+  max_consecutive_losses: 7
+  
+  min_sl_pips: 5
+  max_sl_pips: 150
+
+indicators:
+  ema_trend: 200
+  ema_trend_threshold_pips: 5   # Relax requirement
+  
+  ema_fast: 20
+  ema_slow: 50
+  
+  atr_period: 14
+  atr_pullback_distance: 1.0    # Wider pullback acceptance
+  atr_sl_buffer: 0
+  
+  swing_lookback: 3             # Tighter swing detection
+
+entry_confirmation:
+  enable_engulfing: true
+  enable_rejection: true
+  rejection_wick_ratio: 1.2     # Lower rejection requirement
+
+filters:
+  max_spread_pips: 2.0
+  
+  min_atr_pips: 0               # No minimum volatility
+  max_atr_pips: 0               # No maximum volatility
+  
+  trading_sessions:
+    - london
+    - newyork
+  
+  trading_days:
+    - monday
+    - tuesday
+    - wednesday
+    - thursday
+    - friday
+
+trade_management:
+  enable_breakeven: true        # Move to break-even after 1R
+  breakeven_after_r: 1.0
+  
+  enable_partial_profit: false
+  enable_trailing_stop: false
+
+logging:
+  log_level: INFO
+  log_to_file: true
+  log_to_console: true

@@ -1,0 +1,81 @@
+# Paper Trading Configuration - SAFE DEFAULT FOR TESTING
+# This configuration is designed for paper trading validation
+# with realistic parameters and conservative risk management.
+
+mode: paper  # paper, demo, or live
+
+trading:
+  symbols:
+    - EUR/USD
+    - GBP/USD
+    - USD/JPY
+  
+  timeframe_entry: 15m    # Entry timeframe
+  timeframe_trend: 1h     # Trend filter timeframe
+  
+  max_positions: 1        # One position per symbol
+  cooldown_minutes: 60    # 1 hour cooldown after trade closure
+
+risk_management:
+  risk_per_trade: 0.005       # 0.5% of account equity per trade
+  risk_reward_ratio: 2.0      # 1:2 risk/reward minimum
+  
+  max_daily_loss_pct: 0.02    # Stop if lose 2% in a day
+  max_weekly_loss_pct: 0.05   # Stop if lose 5% in a week
+  max_drawdown_pct: 0.15      # Stop if drawdown reaches 15%
+  
+  max_consecutive_losses: 5   # Stop after 5 consecutive losses
+  
+  min_sl_pips: 5              # Minimum SL distance
+  max_sl_pips: 100            # Maximum SL distance (skip if larger)
+
+indicators:
+  # Trend filter
+  ema_trend: 200              # 200 EMA on 1H for trend
+  ema_trend_threshold_pips: 10  # Must be 10+ pips from 200 EMA
+  
+  # Pullback detection
+  ema_fast: 20                # Fast EMA for pullback area
+  ema_slow: 50                # Slow EMA for pullback area
+  
+  # Volatility
+  atr_period: 14              # ATR calculation period
+  atr_pullback_distance: 0.5  # Pullback within 0.5 ATR of 20/50 EMA
+  atr_sl_buffer: 0            # No extra ATR buffer for SL (set to 0)
+  
+  # Swing detection for SL placement
+  swing_lookback: 5           # 5 candles on each side for swing
+
+entry_confirmation:
+  enable_engulfing: true      # Engulfing candles
+  enable_rejection: true      # Rejection candles
+  rejection_wick_ratio: 1.5   # Wick must be 1.5x body for rejection
+
+filters:
+  max_spread_pips: 1.5        # Skip if spread > 1.5 pips
+  
+  min_atr_pips: 0             # No minimum ATR filter (disabled)
+  max_atr_pips: 0             # No maximum ATR filter (disabled)
+  
+  trading_sessions:           # Allow London and New York sessions
+    - london
+    - newyork
+  
+  trading_days:               # Trade Monday through Friday
+    - monday
+    - tuesday
+    - wednesday
+    - thursday
+    - friday
+
+trade_management:
+  # All optional features disabled for base strategy testing
+  enable_breakeven: false
+  enable_partial_profit: false
+  enable_trailing_stop: false
+  enable_atr_trailing_stop: false
+
+logging:
+  log_level: INFO             # INFO for normal operation
+  log_to_file: true           # Log to file
+  log_to_console: true        # Also log to console

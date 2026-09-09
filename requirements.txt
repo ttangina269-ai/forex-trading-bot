@@ -1,0 +1,28 @@
+# Core dependencies
+python-dateutil==2.8.2
+pytz==2023.3
+pyyaml==6.0
+pydantic==2.4.2
+numpy==1.24.3
+pandas==2.0.3
+scipy==1.11.2
+
+# Broker APIs
+v20==20.30.0  # OANDA v20 API
+
+# Backtesting and data
+requests==2.31.0
+
+# Testing
+pytest==7.4.0
+pytest-cov==4.1.0
+pytest-mock==3.11.1
+
+# Logging and monitoring
+python-dotenv==1.0.0
+
+# Data persistence
+sqlite3-python==1.0.0
+
+# Utilities
+click==8.1.7

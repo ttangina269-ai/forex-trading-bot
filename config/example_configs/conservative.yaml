@@ -1,0 +1,70 @@
+# Conservative Configuration - Minimal Risk, Focus on Survival
+# Use this for initial live trading with extremely tight risk controls.
+
+mode: paper  # Start with paper, switch to live only after validation
+
+trading:
+  symbols:
+    - EUR/USD
+  
+  timeframe_entry: 15m
+  timeframe_trend: 1h
+  
+  max_positions: 1
+  cooldown_minutes: 120    # 2 hour cooldown
+
+risk_management:
+  risk_per_trade: 0.002       # 0.2% per trade (very conservative)
+  risk_reward_ratio: 2.5      # Require 1:2.5
+  
+  max_daily_loss_pct: 0.01    # Stop at 1% daily loss
+  max_weekly_loss_pct: 0.03   # Stop at 3% weekly loss
+  max_drawdown_pct: 0.10      # Stop at 10% drawdown
+  
+  max_consecutive_losses: 3   # Stop after 3 losses
+  
+  min_sl_pips: 10
+  max_sl_pips: 50
+
+indicators:
+  ema_trend: 200
+  ema_trend_threshold_pips: 15  # Require 15 pips from 200 EMA
+  
+  ema_fast: 20
+  ema_slow: 50
+  
+  atr_period: 14
+  atr_pullback_distance: 0.3   # Tighter pullback requirement
+  atr_sl_buffer: 0
+  
+  swing_lookback: 7             # Wider swing detection
+
+entry_confirmation:
+  enable_engulfing: true
+  enable_rejection: true
+  rejection_wick_ratio: 2.0     # Require stronger rejection
+
+filters:
+  max_spread_pips: 1.0          # Skip if spread > 1.0
+  
+  min_atr_pips: 5               # Require at least 5 pips of volatility
+  max_atr_pips: 50              # Don't trade if too volatile
+  
+  trading_sessions:
+    - london
+    - newyork
+  
+  trading_days:
+    - wednesday
+    - thursday
+    - friday
+
+trade_management:
+  enable_breakeven: false
+  enable_partial_profit: false
+  enable_trailing_stop: false
+
+logging:
+  log_level: DEBUG              # Detailed logging
+  log_to_file: true
+  log_to_console: true
